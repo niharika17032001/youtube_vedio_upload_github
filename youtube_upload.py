@@ -20,6 +20,7 @@ SCOPES = ["https://www.googleapis.com/auth/youtube"]
 API_SERVICE_NAME = "youtube"
 API_VERSION = "v3"
 
+
 def set_thumbnail(youtube, video_id: str, thumbnail_path: str):
     """Sets a custom thumbnail for a given video."""
     if not os.path.exists(thumbnail_path):
@@ -34,6 +35,8 @@ def set_thumbnail(youtube, video_id: str, thumbnail_path: str):
     response = request.execute()
     print("Thumbnail uploaded successfully.")
     return response
+
+
 def get_video_duration(video_path):
     """Returns duration in seconds and minutes for a video file."""
     if not os.path.exists(video_path):
@@ -45,6 +48,8 @@ def get_video_duration(video_path):
     clip.close()
 
     return round(duration_seconds, 2), round(duration_minutes, 2)
+
+
 def get_video_paths(directory: str, extensions=None) -> list[str]:
     if extensions is None:
         extensions = ['.mp4', '.mov', '.avi', '.mkv', '.webm', '.flv', '.wmv']
@@ -58,13 +63,11 @@ def get_video_paths(directory: str, extensions=None) -> list[str]:
     return video_paths
 
 
-
-
-
 def read_json_file(filepath):
     with open(filepath, 'r', encoding='utf-8') as f:
         data = json.load(f)
     return data
+
 
 def get_authenticated_service():
     """Build and return an authenticated YouTube API service."""
@@ -81,6 +84,7 @@ def get_authenticated_service():
         API_SERVICE_NAME, API_VERSION, credentials=credentials
     )
 
+
 def add_shorts_tag(title: str, description: str) -> tuple[str, str]:
     """Ensure #Shorts is present in both title and description."""
     tag = "#Shorts"
@@ -91,6 +95,7 @@ def add_shorts_tag(title: str, description: str) -> tuple[str, str]:
         description += f" {tag}"
 
     return title.strip(), description.strip()
+
 
 def upload_video(youtube, file_path, title, description, category_id, keywords, privacy_status):
     """Uploads a video to YouTube with a tqdm progress bar."""
@@ -125,6 +130,7 @@ def upload_video(youtube, file_path, title, description, category_id, keywords, 
     print(f"\n✅ Video id '{response['id']}' was successfully uploaded.")
     return response
 
+
 def main_setup_for_upload_video(json_data):
     youtube = get_authenticated_service()
 
@@ -135,24 +141,20 @@ def main_setup_for_upload_video(json_data):
     for i, item in enumerate(json_data):
 
         raw_title = item.get('title')
-        raw_description =item.get('description')
+        raw_description = item.get('description')
 
-        video_id=item.get('video_id')
-        thumbnail_id=item.get('thumbnail_id')
+        video_id = item.get('video_id')
+        thumbnail_id = item.get('thumbnail_id')
 
-        path=download_folder_from_drive.download_file_from_drive(video_id)
-        thumbnail_path=download_folder_from_drive.download_file_from_drive(thumbnail_id)
-
-
+        path = download_folder_from_drive.download_file_from_drive(video_id)
+        thumbnail_path = download_folder_from_drive.download_file_from_drive(thumbnail_id)
 
         print(f"Title: {raw_title}")
         print(f"Description: {raw_description}")
         print(f"Video Path: {path}")
         print(f"Thumbnail Path: {thumbnail_path}")
 
-
         title, description = add_shorts_tag(raw_title, raw_description)
-
 
         try:
             clip = VideoFileClip(path)
@@ -160,7 +162,6 @@ def main_setup_for_upload_video(json_data):
             print(f"Original video duration: {round(duration, 2)} seconds")
 
             if duration > 59:
-
                 client = Client("amit0987/hf-vedio-cut")
                 # Call the API with the video file (remove extra quotes in the path)
                 # Define your inputs
@@ -187,13 +188,13 @@ def main_setup_for_upload_video(json_data):
         video_id = response['id']
         print(f"video_id_{i}:{video_id}")
 
-def main(max_videos= 1 ):
+
+def main(max_videos=1):
     metadata_file_json_file = ImportantVariables.metadata_file_json_file
     json_data = read_json_file(metadata_file_json_file)
 
     if max_videos < 0:
         max_videos = len(json_data)
-
 
     try:
         main_setup_for_upload_video(json_data[:max_videos])
@@ -207,8 +208,6 @@ def main(max_videos= 1 ):
 
     with open(metadata_file_json_file, "w") as json_file:
         json.dump(json_data[max_videos:], json_file, indent=4)
-
-
 
 
 if __name__ == "__main__":
