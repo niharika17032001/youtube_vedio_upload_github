@@ -3,7 +3,11 @@ import os
 # root folder path
 file_path = os.path.abspath(__file__)
 current_Folder_Path = os.path.dirname(file_path)
+print(f"current_Folder_Path: {current_Folder_Path}")
+current_folder_name = os.path.basename(current_Folder_Path)
+print(f"Current Folder Name: {current_folder_name}")
 root_folder = os.path.dirname(current_Folder_Path)
+print(f"root_folder: {root_folder}")
 
 # imp folder path
 content_folder = current_Folder_Path + "/content/"
@@ -23,7 +27,7 @@ drive_file_structure_file=drive_file_structure_folder+"/folder_tree.json"
 # github
 GITHUB_LOCAL_FILE_PATH = current_Folder_Path + "/daily_update.txt"
 GITHUB_OWNER = "niharika17032001"
-GITHUB_google_log_in_REPO = "google_log_in"
+GITHUB_REPO = current_folder_name
 GITHUB_WORKFLOW_FILE = "main.yml"
 GITHUB_BRANCH = "main"
 
