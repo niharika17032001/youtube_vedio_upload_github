@@ -5,7 +5,7 @@ file_path = os.path.abspath(__file__)
 current_Folder_Path = os.path.dirname(file_path)
 print(f"current_Folder_Path: {current_Folder_Path}")
 current_folder_name = os.path.basename(current_Folder_Path)
-print(f"Current Folder Name: {current_folder_name}")
+# print(f"Current Folder Name: {current_folder_name}")
 root_folder = os.path.dirname(current_Folder_Path)
 print(f"root_folder: {root_folder}")
 
@@ -15,14 +15,15 @@ downloaded_videos_folder = current_Folder_Path + "/downloaded_videos"
 imp_json_files_folder = current_Folder_Path + "/imp_json_files/"
 youtube_upload_folder = current_Folder_Path + "/youtube_upload_folder"
 output_videos_folder = current_Folder_Path + "/output_videos"
-drive_file_structure_folder = current_Folder_Path +"/folder_tree"
+drive_file_structure_folder = current_Folder_Path + "/folder_tree"
 
 # imp files path
 metadata_file_json_file = imp_json_files_folder + "video_metadata.json"
+yt_links_for_facebook_json_file_path = imp_json_files_folder + "yt_links_for_facebook.json"
 link_of_youtube_videos_json_file = imp_json_files_folder + "link_of_youtube_videos.json"
 channels_list_json_file = imp_json_files_folder + "channels_list.json"
 cookies_file_path = imp_json_files_folder + "main_cookies.txt"
-drive_file_structure_file=drive_file_structure_folder+"/folder_tree.json"
+drive_file_structure_file = drive_file_structure_folder + "/folder_tree.json"
 
 # github
 GITHUB_LOCAL_FILE_PATH = current_Folder_Path + "/daily_update.txt"
@@ -35,7 +36,7 @@ GITHUB_BRANCH = "main"
 youtube_videos_for_upload_folder_id = "1V3gjZpfNJbFMPO0R1OAnrRjoqD0pozr4"
 imp_json_files_folder_id = "1xjvtIZXSwpSaZS4uS0YRzhDEQuR_wgVu"
 youtube_vedio_folder_id = "1vsBjK-7SBeJAwNv5CeBNBT_hiHWu_6pM"
-drive_file_structure_file_id="14fJbKlztEpnRuzv9Zv5if45iqDHs4wxb"
+drive_file_structure_file_id = "14fJbKlztEpnRuzv9Zv5if45iqDHs4wxb"
 
 # vedio editing paths
 PATHS = {
@@ -57,11 +58,13 @@ def create_output_videos_folder():
         os.makedirs(output_videos_folder)
     return output_videos_folder
 
+
 def create_drive_file_structure_folder():
-    folder=current_Folder_Path+"/drive_file_structure_folder"
+    folder = current_Folder_Path + "/drive_file_structure_folder"
     if not os.path.exists(folder):
         os.makedirs(folder)
     return folder
+
 
 def create_youtube_upload_folder():
     if not os.path.exists(youtube_upload_folder):

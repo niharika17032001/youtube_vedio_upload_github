@@ -20,6 +20,10 @@ SCOPES = ["https://www.googleapis.com/auth/youtube"]
 API_SERVICE_NAME = "youtube"
 API_VERSION = "v3"
 
+# imp variables
+yt_links_for_facebook_json_file_path = ImportantVariables.yt_links_for_facebook_json_file_path
+metadata_file_json_file = ImportantVariables.metadata_file_json_file
+
 
 def set_thumbnail(youtube, video_id: str, thumbnail_path: str):
     """Sets a custom thumbnail for a given video."""
@@ -63,10 +67,22 @@ def get_video_paths(directory: str, extensions=None) -> list[str]:
     return video_paths
 
 
+def file_exists(filepath):
+    return os.path.exists(filepath)
+
+
 def read_json_file(filepath):
+    if not file_exists(filepath):
+        raise FileNotFoundError(f"File not found: {filepath}")
+
     with open(filepath, 'r', encoding='utf-8') as f:
         data = json.load(f)
     return data
+
+
+def write_json_file(filepath, data):
+    with open(filepath, 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
 
 
 def get_authenticated_service():
@@ -161,7 +177,7 @@ def main_setup_for_upload_video(json_data):
             duration = clip.duration
             print(f"Original video duration: {round(duration, 2)} seconds")
 
-            if duration > 59:
+            if 59 < duration < 80:
                 client = Client("amit0987/hf-vedio-cut")
                 # Call the API with the video file (remove extra quotes in the path)
                 # Define your inputs
@@ -188,9 +204,12 @@ def main_setup_for_upload_video(json_data):
         video_id = response['id']
         print(f"video_id_{i}:{video_id}")
 
+        data = read_json_file(yt_links_for_facebook_json_file_path)
+        data.append(video_id)
+        write_json_file(yt_links_for_facebook_json_file_path, data)
+
 
 def main(max_videos=1):
-    metadata_file_json_file = ImportantVariables.metadata_file_json_file
     json_data = read_json_file(metadata_file_json_file)
 
     if max_videos < 0:
@@ -206,9 +225,10 @@ def main(max_videos=1):
     finally:
         print("Upload process completed.")
 
-    with open(metadata_file_json_file, "w") as json_file:
-        json.dump(json_data[max_videos:], json_file, indent=4)
+    write_json_file(metadata_file_json_file, json_data[max_videos:])
 
 
 if __name__ == "__main__":
     main()
+    # a=read_json_file(yt_links_for_facebook_json_file_path)
+    # print(a)

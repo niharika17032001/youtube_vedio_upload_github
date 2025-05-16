@@ -43,7 +43,8 @@ def copy_files_to_folder(files, destination_folder):
 
 def prepare_imp_json_folder_to_upload(destination_folder):
     imp_json_files = [
-        imp_val.metadata_file_json_file
+        imp_val.metadata_file_json_file,
+        imp_val.yt_links_for_facebook_json_file_path
     ]
     imp_json_files_folder = destination_folder + "/imp_json_files"
 
