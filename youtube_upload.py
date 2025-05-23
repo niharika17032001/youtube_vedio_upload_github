@@ -1,5 +1,7 @@
 import json
 import os
+import re
+from collections import Counter
 
 import googleapiclient.discovery
 import googleapiclient.http
@@ -113,6 +115,14 @@ def add_shorts_tag(title: str, description: str) -> tuple[str, str]:
     return title.strip(), description.strip()
 
 
+def extract_keywords_form_title_or_description(title="", description="", max_keywords=5):
+    text = title + " " + description
+    words = re.findall(r'\w+', text.lower())
+    common_words = {'the', 'and', 'for', 'with', 'this', 'that', 'from', 'you', 'your', 'but'}
+    keywords = [word for word in words if word not in common_words]
+    return [kw for kw, _ in Counter(keywords).most_common(max_keywords)]
+
+
 def upload_video(youtube, file_path, title, description, category_id, keywords, privacy_status):
     """Uploads a video to YouTube with a tqdm progress bar."""
     body = {
@@ -147,7 +157,7 @@ def upload_video(youtube, file_path, title, description, category_id, keywords, 
     return response
 
 
-def main_setup_for_upload_video(json_data):
+def main_setup_for_upload_youtube_shorts_video(json_data):
     youtube = get_authenticated_service()
 
     category_id = "22"  # Example: People & Blogs
@@ -201,6 +211,43 @@ def main_setup_for_upload_video(json_data):
             print(f"Error processing {path}: {e}")
 
         response = upload_video(youtube, path, title, description, category_id, keywords, privacy_status)
+        video_id = response['id']
+        print(f"video_id_{i}:{video_id}")
+
+        data = read_json_file(yt_links_for_facebook_json_file_path)
+        data.append(video_id)
+        write_json_file(yt_links_for_facebook_json_file_path, data)
+
+
+def main_setup_for_upload_video(json_data):
+    youtube = get_authenticated_service()
+
+    category_id = "22"  # Example: People & Blogs
+
+    privacy_status = "public"
+
+    for i, item in enumerate(json_data):
+
+        raw_title = item.get('title')
+        raw_description = item.get('description')
+        raw_tags = item.get('tags')
+
+        video_id = item.get('video_id')
+        thumbnail_id = item.get('thumbnail_id')
+
+        path = download_folder_from_drive.download_file_from_drive(video_id)
+        thumbnail_path = download_folder_from_drive.download_file_from_drive(thumbnail_id)
+
+        print(f"Title: {raw_title}")
+        print(f"Description: {raw_description}")
+        print(f"Video Path: {path}")
+        print(f"Thumbnail Path: {thumbnail_path}")
+
+        # title, description = add_shorts_tag(raw_title, raw_description)
+        title, description = raw_title, raw_description
+        tags = extract_keywords_form_title_or_description(title,description,99)
+
+        response = upload_video(youtube, path, title, description, category_id, tags, privacy_status)
         video_id = response['id']
         print(f"video_id_{i}:{video_id}")
 
