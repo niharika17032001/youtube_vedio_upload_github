@@ -258,12 +258,17 @@ def main_setup_for_upload_video(json_data):
 
 def main(max_videos=1):
     json_data = read_json_file(metadata_file_json_file)
+    # print(json_data)
+    all_vedio_json_data=json_data["video"]
 
     if max_videos < 0:
         max_videos = len(json_data)
 
+    max_videos_json_data=all_vedio_json_data[:max_videos]
+    # print(max_videos_json_data)
+
     try:
-        main_setup_for_upload_video(json_data[:max_videos])
+        main_setup_for_upload_video(max_videos_json_data)
 
 
     except Exception as e:
@@ -272,7 +277,10 @@ def main(max_videos=1):
     finally:
         print("Upload process completed.")
 
-    write_json_file(metadata_file_json_file, json_data[max_videos:])
+
+
+    json_data["video"]=all_vedio_json_data[max_videos:]
+    write_json_file(metadata_file_json_file, json_data)
 
 
 if __name__ == "__main__":
