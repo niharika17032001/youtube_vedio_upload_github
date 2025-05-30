@@ -252,7 +252,8 @@ def main_setup_for_upload_video(json_data):
         print(f"video_id_{i}:{video_id}")
 
         data = read_json_file(yt_links_for_facebook_json_file_path)
-        data.append(video_id)
+        data[f"{len(data)}"] = video_id
+        # data.append(video_id)
         write_json_file(yt_links_for_facebook_json_file_path, data)
 
 
