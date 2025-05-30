@@ -1,3 +1,4 @@
+import json
 import os
 import shutil
 
@@ -101,14 +102,30 @@ def get_or_create_folder(folder_name, parent_drive_folder_id):
     return folder.get('id')
 
 
+def prepare_yt_links_for_facebook_json():
+    filepath = imp_val.yt_links_for_facebook_json_file_path
+    with open(filepath, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    if isinstance(data, list):
+        main_dict = {}
+        print("convert yt_links_for_facebook_json list into dict ")
+        for i, id in enumerate(data):
+            main_dict[i] = id
+
+        with open(filepath, 'w', encoding='utf-8') as f:
+            json.dump(main_dict, f, indent=4, ensure_ascii=False)
+
+
 def main():
     parent_drive_folder_id = imp_val.youtube_videos_for_upload_folder_id
     current_folder = imp_val.current_Folder_Path
     imp_json_folder_to_upload_path = current_folder + "/imp_json_folder_to_upload"
 
+    prepare_yt_links_for_facebook_json()
     prepare_imp_json_folder_to_upload(imp_json_folder_to_upload_path)
     upload_folder_to_drive(imp_json_folder_to_upload_path, parent_drive_folder_id)
 
 
 if __name__ == "__main__":
     main()
+    # prepare_yt_links_for_facebook_json()
