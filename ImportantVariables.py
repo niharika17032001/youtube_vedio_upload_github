@@ -31,6 +31,7 @@ GITHUB_OWNER = "niharika17032001"
 GITHUB_REPO = current_folder_name
 GITHUB_WORKFLOW_FILE = "main.yml"
 GITHUB_BRANCH = "main"
+TOKENS_LOCAL_FILE_PATH = current_Folder_Path+"/tokens.json"
 
 # drive imp folders id
 youtube_videos_for_upload_folder_id = "1V3gjZpfNJbFMPO0R1OAnrRjoqD0pozr4"
