@@ -1,11 +1,7 @@
 import json
 import os
 
-from dotenv import load_dotenv
-
 from ImportantVariables import TOKENS_LOCAL_FILE_PATH
-
-load_dotenv()
 
 try:
     with open(TOKENS_LOCAL_FILE_PATH, "r") as f:
@@ -15,8 +11,6 @@ except json.JSONDecodeError:
     print("⚠️ Existing token file is not valid JSON. Overwriting it.")
 except Exception as e:
     print(f"⚠️ Error reading existing file: {e}")
-
-GITHUB_TOKEN = os.getenv("MY_GITHUB_TOKEN")
 
 GOOGLE_YOUTUBE_CLIENT_ID = existing_data["youtube"]["client_id"]
 GOOGLE_YOUTUBE_CLIENT_SECRET = existing_data["youtube"]["client_secret"]

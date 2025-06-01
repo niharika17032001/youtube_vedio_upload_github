@@ -1,11 +1,11 @@
 import requests
 
-import crediantials
+import github_crediantials
 
 
 def main():
     # === Configuration ===
-    GITHUB_TOKEN = crediantials.GITHUB_TOKEN  # 🔐 Replace with your actual token
+    GITHUB_TOKEN = github_crediantials.GITHUB_TOKEN  # 🔐 Replace with your actual token
     USERNAME = "niharika17032001"
     REPO = "All_crediantial_files"
     FILE_PATH = "tokens.json"
@@ -31,5 +31,6 @@ def main():
     else:
         print(f"❌ Failed to download file: {response.status_code} - {response.text}")
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     main()

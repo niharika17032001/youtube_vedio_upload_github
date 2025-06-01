@@ -30,6 +30,7 @@ jobs:
           MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
 
         run: |
+          python clone_a_file_from_github.py
           python main_app.py
   notify-on-failure:
     name: Notify Discord on Failure
