@@ -16,7 +16,7 @@ except json.JSONDecodeError:
 except Exception as e:
     print(f"⚠️ Error reading existing file: {e}")
 
-GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+GITHUB_TOKEN = os.getenv("MY_GITHUB_TOKEN")
 
 GOOGLE_YOUTUBE_CLIENT_ID = existing_data["youtube"]["client_id"]
 GOOGLE_YOUTUBE_CLIENT_SECRET = existing_data["youtube"]["client_secret"]
